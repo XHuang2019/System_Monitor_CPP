@@ -1,5 +1,9 @@
+#pragma once
+
 #include "Process.h"
+#include <string>
 #include <vector>
+
 class ProcessContainer{
 
 private:
@@ -36,7 +40,7 @@ std::vector<std::vector<std::string> > ProcessContainer::getList(){
     }
     int lastIndex = 0;
     for (int i=0; i<stringifiedList.size();i++){
-        if(i %10 == 0 && i > 0){
+        if(i % 10 == 0 && i > 0){
           std::vector<std::string>  sub(&stringifiedList[i-10], &stringifiedList[i]);
           values.push_back(sub);
           lastIndex = i;

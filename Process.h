@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+#include "ProcessParser.h"
 
 using namespace std;
 /*
@@ -7,44 +10,62 @@ It contains relevant attributes as shown below
 */
 class Process {
 private:
-    string pid;
-    string user;
-    string cmd;
-    string cpu;
-    string mem;
-    string upTime;
+    std::string pid;
+    std::string user;
+    std::string cmd;
+    std::string cpu;
+    std::string mem;
+    std::string upTime;
 
 public:
     Process(string pid){
         this->pid = pid;
         this->user = ProcessParser::getProcUser(pid);
         //TODOs:
-        //complete for mem
-        //complete for cmd
-        //complete for upTime
-        //complete for cpu
+        this->cmd = ProcessParser::getCmd(pid);
+        this->mem = ProcessParser::getVmSize(pid);
+        this->cpu = ProcessParser::getCpuPercent(pid);
+        this->upTime = ProcessParser::getProcUpTime(pid);
+
     }
     void setPid(int pid);
-    string getPid()const;
-    string getUser()const;
-    string getCmd()const;
-    int getCpu()const;
-    int getMem()const;
-    string getUpTime()const;
-    string getProcess();
+    std::string getPid() const;
+    std::string getUser() const;
+    std::string getCmd() const;
+    std::string getCpu() const;
+    std::string getMem() const;
+    std::string getUpTime() const;
+    std::string getProcess();
 };
 void Process::setPid(int pid){
-    this->pid = pid;
+    this->pid = to_string(pid);
 }
-string Process::getPid()const {
+std::string Process::getPid() const {
     return this->pid;
 }
-string Process::getProcess(){
+std::string Process::getUser() const {
+    return this->user;
+}
+std::string Process::getCmd() const {
+    return this->cmd;
+}
+std::string Process::getCpu() const {
+    return this->cpu;
+}
+std::string Process::getMem() const {
+    return this->mem;
+}
+std::string Process::getUpTime() const {
+    return this->upTime;
+}
+std::string Process::getProcess(){
     if(!ProcessParser::isPidExisting(this->pid))
         return "";
     this->mem = ProcessParser::getVmSize(this->pid);
     this->upTime = ProcessParser::getProcUpTime(this->pid);
     this->cpu = ProcessParser::getCpuPercent(this->pid);
 
-    return (this->pid + "   " + //TODO: finish the string! this->user + "   "+ mem...cpu...upTime...;
+    return (this->pid + " " + this->user + " " +
+            this->mem.substr(0, 5) + " " + this->cpu.substr(0, 5) + " " +
+            this->upTime.substr(0, 5) + " " + this->cmd.substr(0, 30) + "...");
 }
